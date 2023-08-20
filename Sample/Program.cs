@@ -10,14 +10,21 @@ Console.Write("Digite: ");
     2. a Program.cs pode ignorar porque apenas tem questões para manter o programa rodando e popular a lista automaticamente se desejado para economizar tempo
     3. Deixei comentado algumas partes do código referentes as operações com lista para facilitar o entendimento
     4. Tentei deixar o mais simples que deu mas para não ficar com muitas linhas tive que utilizar métodos
-    5. As palavras static, public, private, internal e void não é necessário o significado para entender a lista
+    5. As palavras async, await, static, public, private, internal e void não é necessário o significado para entender a lista
  */
+
 int opcao = Convert.ToInt32(Console.ReadLine());
 if (opcao == 1)
 {
-    Console.WriteLine("aguarde...");
+    Console.WriteLine("Criando pessoas aleatórias");
+    Console.ForegroundColor = ConsoleColor.Yellow;
+    Console.WriteLine("Aviso: Essas pessoas não terão endereço principal, mas podem ter de 1-8 outros endereços");
+    Console.ForegroundColor = ConsoleColor.White;
+    Console.WriteLine("Aguarde...");
     await PessoaService.BuildRandomPeople(ListaSample.Pessoas);
-    Console.WriteLine($"sua lista já contém {ListaSample.Pessoas.Count} pessoas");
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine($"sua lista agora contém {ListaSample.Pessoas.Count} pessoas");
+    Console.ForegroundColor = ConsoleColor.White;
 }
 
 while (true)

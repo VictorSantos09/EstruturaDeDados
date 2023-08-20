@@ -54,31 +54,17 @@ internal class ListaSample
         int contador = 0;
         foreach (Pessoa p in Pessoas)
         {
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine($"\nPessoa Nº {++contador}\n");
-            Console.WriteLine($"ID: {p.Id}");
-            Console.WriteLine($"NOME: {p.Nome}");
-            Console.WriteLine($"DATA DE NASCIMENTO: {p.DataNac}");
-            Console.WriteLine($"CPF: {p.CPF}");
-            if (p.PrincipalEndereco.IdClient != Guid.Empty)
-            {
-                Console.WriteLine("-----------PRINCIPAL ENDEREÇO-----------");
-                VerEndereco(p.PrincipalEndereco);
-            }
-
-            if (p.Enderecos.Count > 0)
-            {
-                Console.WriteLine("-----------OUTROS ENDEREÇOS-----------");
-                foreach (Endereco e in p.Enderecos)
-                {
-                    VerEndereco(e);
-                }
-            }
+            Console.ForegroundColor = ConsoleColor.White;
+            PrintarPessoa(p);
         }
     }
 
-    private static void VerEndereco(Endereco endereco) // printa o endereço
+    private static void PrintarEndereco(Endereco endereco) // printa o endereço
     {
         Console.WriteLine($"NUMERO: {endereco.Numero}");
+        Console.WriteLine($"LOGRADOURO: {endereco.Logradouro}");
         Console.WriteLine($"ID: {endereco.Id}");
         Console.WriteLine($"ID DA PESSOA: {endereco.IdClient}");
     }
@@ -125,7 +111,7 @@ internal class ListaSample
 
     private static void AtualizarPessoa() // atualiza as informações de uma pessoa selecionada na lista
     {
-        Console.ForegroundColor = ConsoleColor.Red;
+        Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine("AVISO: AS INFORMAÇÕES SERÃO TROCADAS MESMO QUE NÃO INFORME, SE NÃO DESEJA ALTERAR, ESCREVA NOVAMENTE");
         Console.ForegroundColor = ConsoleColor.White;
 
@@ -175,8 +161,7 @@ internal class ListaSample
         Console.WriteLine("1 - ID");
         Console.WriteLine("2 - CPF");
         Console.WriteLine("3 - NOME");
-        Console.WriteLine("4 - NÚMERO DE ENDEREÇO");
-        Console.WriteLine("5 - DATA DE NASCIMENTO");
+        Console.WriteLine("4 - DATA DE NASCIMENTO");
         int opcao = Convert.ToInt32(Console.ReadLine());
 
         Console.WriteLine("Digite o texto para filtrar");
@@ -191,7 +176,7 @@ internal class ListaSample
                 break;
 
             case 2:
-                pessoa = (Pessoa)Pessoas.Where(x => x.CPF == filtro); // busca e converte na lista onde for encontrado na lista uma pessoa com o mesmo CPF de filtro
+                pessoa = Pessoas.Where(x => x.CPF == filtro).First(); // busca e converte na lista onde for encontrado na lista uma pessoa com o mesmo CPF de filtro
                 PrintarPessoa(pessoa);
                 break;
 
@@ -201,12 +186,7 @@ internal class ListaSample
                 break;
 
             case 4:
-                pessoa = Pessoas.Find(x => x.PrincipalEndereco.Numero == filtro);
-                PrintarPessoa(pessoa);
-                break;
-
-            case 5:
-                pessoa = Pessoas.Find(x => x.DataNac == DateTime.Parse(filtro));
+                pessoa = Pessoas.Find(x => x.DataNac.ToShortDateString() == DateTime.Parse(filtro).ToShortDateString());
                 PrintarPessoa(pessoa);
                 break;
             default:
@@ -242,8 +222,20 @@ internal class ListaSample
             Console.WriteLine($"DATA DE NASCIMENTO: {pessoa.DataNac}");
             Console.WriteLine($"CPF: {pessoa.CPF}");
 
-            Console.WriteLine("-----------PRINCIPAL ENDEREÇO-----------");
-            VerEndereco(pessoa.PrincipalEndereco);
+            if (pessoa.PrincipalEndereco.IdClient != Guid.Empty)
+            {
+                Console.WriteLine("-----------PRINCIPAL ENDEREÇO-----------");
+                PrintarEndereco(pessoa.PrincipalEndereco);
+            }
+
+            if (pessoa.Enderecos.Count > 0)
+            {
+                Console.WriteLine("-----------OUTROS ENDEREÇOS-----------");
+                foreach (Endereco e in pessoa.Enderecos)
+                {
+                    PrintarEndereco(e);
+                }
+            }
         }
     }
 }
