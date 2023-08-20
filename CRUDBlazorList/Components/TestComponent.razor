@@ -1,0 +1,31 @@
+﻿@using Aula1.Model;
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nº</th>
+                <th>Numero</th>
+                <th>Logradouro</th>
+                <th>ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var count = 0;
+            }
+            @foreach (Endereco e in Addresses)
+            {
+                <tr>
+                    <th>@(++count)</th>
+                    <td>@e.Numero</td>
+                    <td>@e.Logradouro</td>
+                    <td>@e.Id</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    [Parameter] public List<Endereco>? Addresses { get; set; }
+}

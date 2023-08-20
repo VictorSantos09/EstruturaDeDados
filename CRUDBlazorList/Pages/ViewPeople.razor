@@ -1,0 +1,81 @@
+﻿@page "/viewPeople"
+@using Aula1.Model;
+<PageTitle>Ver Pessoas</PageTitle>
+@inject NavigationManager _navigationManager;
+<h3>Pessoas Registradas</h3>
+
+@if (PersonDAL.People.Count <= 0)
+{
+    <p>Carregando...</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nº</th>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>Data de Nascimento</th>
+                <th>Ver Endereço</th>
+                <th>Remover</th>
+                <th>Editar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int counter = 0;
+            }
+            @foreach (var p in PersonDAL.People)
+            {
+                <tr>
+                    <td>@(++counter)</td>
+                    <td>@p.Id</td>
+                    <td>@p.Nome</td>
+                    <td>@p.CPF</td>
+                    <td>@p.DataNac.ToShortDateString()</td>
+                    @{
+                        var parameters = new ModalParameters().Add(nameof(TestComponent.Addresses), p.Enderecos);
+                    }
+                    <td>
+                        <button class="btn btn-primary" @onclick="@(() => Modal.Show<TestComponent>("Endereços Registrados", parameters))">
+                            <span class="oi oi-plus"></span>
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="() => Delete(p.Id)">
+                            <span class="oi oi-delete"></span>
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="() => RedirectUpdate(p.Id)">
+                            <span class="oi oi-pencil"></span>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@code {
+    [CascadingParameter] public IModalService Modal { get; set; }
+    public static int MyProperty { get; set; } = 0;
+
+    protected async override Task OnInitializedAsync()
+    {
+        if (PersonDAL.People.Count <= 0)
+            await PessoaService.BuildRandomPeople(PersonDAL.People);
+    }
+
+    private void Delete(Guid id)
+    {
+        var person = PersonDAL.People.Find(x => x.Id == id);
+        PersonDAL.People.Remove(person);
+    }
+
+    private void RedirectUpdate(Guid id)
+    {
+        _navigationManager.NavigateTo($"/updatePerson/{id}");
+    }
+}

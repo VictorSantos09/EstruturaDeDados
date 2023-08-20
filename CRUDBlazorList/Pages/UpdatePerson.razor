@@ -1,0 +1,52 @@
+﻿@page "/updatePerson/{UserID}"
+@using Aula1.Model;
+@inject NavigationManager _navigationManager;
+
+<PageTitle>Atualizar Pessoa</PageTitle>
+<h3 class="d-flex justify-content-center p-3">Atualizar Pessoa</h3>
+
+<section class="p-3">
+    <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">Nome</span>
+        <input type="text" class="form-control" placeholder="Nome completo" @bind="@Person.Nome">
+    </div>
+
+    <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">Data de Nascimento</span>
+        <input type="date" class="form-control" placeholder="Data de nascimento" @bind="@Person.DataNac">
+    </div>
+
+    <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">CPF</span>
+        <input type="number" class="form-control" placeholder="CPF completo" @bind="@Person.CPF">
+    </div>
+
+    <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">Logradouro</span>
+        <input type="text" class="form-control" placeholder="Logradouro" @bind="@Person.PrincipalEndereco.Logradouro">
+    </div>
+
+    <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">Número</span>
+        <input type="text" class="form-control" placeholder="Número do endereço" @bind="@Person.PrincipalEndereco.Numero">
+    </div>
+
+    <button class="btn btn-primary" @onclick="@Redirect">Atualizar</button>
+</section>
+
+@code {
+    [Parameter]
+    public string UserID { get; set; }
+    private Pessoa Person;
+
+    protected override void OnParametersSet()
+    {
+        Guid id = Guid.Parse(UserID);
+        Person = PersonDAL.People.Find(x => x.Id == id);
+    }
+
+    private void Redirect()
+    {
+        _navigationManager.NavigateTo("/viewPeople"); 
+    }
+}
