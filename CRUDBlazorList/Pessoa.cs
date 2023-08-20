@@ -2,7 +2,7 @@
 
 public class Pessoa
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
     public string Nome { get; set; }
     public DateTime DataNac { get; set; }
     public string CPF { get; set; }
@@ -12,8 +12,8 @@ public class Pessoa
 
 public class Endereco
 {
-    public Guid Id { get; set; }
-    public Guid IdClient{ get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid IdClient { get; set; }
     public string Logradouro { get; set; }
     public string Numero { get; set; }
 }
