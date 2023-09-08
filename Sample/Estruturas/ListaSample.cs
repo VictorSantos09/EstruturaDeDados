@@ -1,4 +1,5 @@
 ﻿using Aula1.Model;
+using CRUDBlazorList;
 using System.Reflection.PortableExecutable;
 using System.Threading.Channels;
 
@@ -7,8 +8,29 @@ internal class ListaSample
 {
     public static List<Pessoa> Pessoas = new();
 
+    public static async Task DefaultPeople()
+    {
+        Console.WriteLine("Deseja iniciar com uma lista contendo valores? 1 - SIM | 2 - NÃO");
+        Console.Write("Digite: ");
+
+        int opcao = Convert.ToInt32(Console.ReadLine());
+        if (opcao == 1)
+        {
+            Console.WriteLine("Criando pessoas aleatórias");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Aviso: Essas pessoas não terão endereço principal, mas podem ter de 1-8 outros endereços");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("Aguarde...");
+            await PessoaService.BuildRandomPeople(Pessoas);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"sua lista agora contém {Pessoas.Count} pessoas");
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+    }
+
     public static bool Executar() // executa o programa contendo todas as opção fornecidas para demonstração
     {
+        DefaultPeople().RunSynchronously();
         Console.WriteLine("0 - Sair");
         Console.WriteLine("1 - Ver Pessoas Registradas");
         Console.WriteLine("2 - Registrar Pessoas");
