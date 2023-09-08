@@ -23,7 +23,7 @@ while (rodar)
         switch (Console.ReadLine())
         {
             case "1":
-                rodar = ListaSample.Executar();
+                rodar = await ListaSample.Executar();
                 break;
 
             case "2":

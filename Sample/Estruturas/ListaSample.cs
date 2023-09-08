@@ -7,6 +7,7 @@ namespace Sample.Estruturas;
 internal class ListaSample
 {
     public static List<Pessoa> Pessoas = new();
+    public static bool HasDefaultPeople { get; set; }
 
     public static async Task DefaultPeople()
     {
@@ -26,11 +27,14 @@ internal class ListaSample
             Console.WriteLine($"sua lista agora contém {Pessoas.Count} pessoas");
             Console.ForegroundColor = ConsoleColor.White;
         }
+        HasDefaultPeople = true;
     }
 
-    public static bool Executar() // executa o programa contendo todas as opção fornecidas para demonstração
+    public static async Task<bool> Executar() // executa o programa contendo todas as opção fornecidas para demonstração
     {
-        DefaultPeople().RunSynchronously();
+        if (HasDefaultPeople == false)
+            await DefaultPeople();
+
         Console.WriteLine("0 - Sair");
         Console.WriteLine("1 - Ver Pessoas Registradas");
         Console.WriteLine("2 - Registrar Pessoas");
